@@ -18,29 +18,33 @@ angular.module("myChats").controller("mainCtrl", function($scope, mainSrvc, $int
 
   $scope.addChats = function(newChat){
     // TODO Call service to add chats
-    mainSrvc.addChats(newChat).then(function() {
-      getChats();
+    mainSrvc.addChats(newChat).then(function(response) {
+      $scope.chats = response.data;
     })
   }
-
+  // get chats does not need to be on the $scope
   function getChats(){
     // TODO Tell service to get chats
     mainSrvc.getChats().then(function(response) {
-      $scope.chats = response;
-      console.log("this is $scope.chats", $scope.chats)
+      $scope.chats = response.data;
     });
-    // console.log('this is $scope.chats', $scope.chats)
   }
 
   $scope.deleteChats = function(){
     // TODO Tell service to delete all chats
-    mainSrvc.deleteChats();
+    mainSrvc.deleteChats().then(function () {
+      $scope.chats =[];
+    });
+  }
+
+  $scope.setScreenname = function (screenname) {
+    mainSrvc.setScreenname(screenname);
   }
 
   // Gets initial chats
   getChats();
 
   // Set up repeating call to get chats
-  //  $interval(getChats, 3000);
+    $interval(getChats, 3000);
 
 })

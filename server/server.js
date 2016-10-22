@@ -10,6 +10,7 @@ var config = require('./server_config');
 app.use(bodyParser.json());
 
 app.use(express.static('public'));
+
 // TODO Initialize Session
 app.use(session({
   secret: config.sessionSecret,
@@ -20,10 +21,11 @@ app.use(session({
 app.post("/api/screenname", function(req, res){
   // TODO Save screenname to session
   session.screenname = req.body.screenname;
+  console.log(111111,session);
 })
 
 app.get("/api/chats", chatCtrl.getChats);
-app.post("/api/chats", chatCtrl.postChats);
+app.post("/api/chats", addScreenname,  chatCtrl.postChats);
 app.delete("/api/chats", chatCtrl.deleteChats);
 
 
@@ -31,3 +33,9 @@ app.delete("/api/chats", chatCtrl.deleteChats);
 app.listen(port, function(){
   console.log("Listeing on port ", port, " All your base belong to us!");
 });
+
+
+function addScreenname(req, res, next) {
+  req.body.screenname = session.screenname;
+  next();
+}
