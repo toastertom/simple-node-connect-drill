@@ -8,7 +8,8 @@ var config = require('./server_config');
 // TODO server front end files with static
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/public'));
+
+app.use(express.static('public'));
 // TODO Initialize Session
 app.use(session({
   secret: config.sessionSecret,
@@ -16,9 +17,9 @@ app.use(session({
   resave: false
 }));
 
-app.post("/api/:screenname", function(req, res){
+app.post("/api/screenname", function(req, res){
   // TODO Save screenname to session
-  req.session.screenname = req.params.screenname;
+  session.screenname = req.body.screenname;
 })
 
 app.get("/api/chats", chatCtrl.getChats);
